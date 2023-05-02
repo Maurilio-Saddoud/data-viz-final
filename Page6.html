@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alata&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Final Project</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="title-container">
+        <h1>The Increasing Cost of College in Each Region</h1>
+      </div>
+      <div class="nav-buttons-container">
+        <button onclick="directToPage5()">Prev page</button>
+        <button onclick="directToHome()">Home</button>
+      </div>
+      <div class="p-container">
+        <p>
+          Below you can see a star chart that has several characteristics on it.
+          The green line represents the average cost of a 4-year degree broken
+          down into seven regions. the other lines represent various ethnic
+          groups within the US broken down into their percentage of the regions
+          average college attendance by said ethnic group. The largest and most
+          notable group would be those of European decent represented by the
+          grey line. As you can see white college students are the majority of
+          the four-year degree program participants in every region during the
+          year 2020. The Blue and Purple groups represent African American and
+          Latino Americans respectively.
+        </p>
+      </div>
+      <div class="svg-container"></div>
+      <div class="p-container follow-up">
+        <p>
+          An interesting relationship seems to be developing between college
+          cost and representation. As cost goes up the relative diversity
+          amongst student bodies goes down. We believe this is due to the fact
+          that college cost is a larger barrier to those from marginalized and
+          low-income communities.
+        </p>
+      </div>
+      <div class="nav-buttons-container">
+        <button onclick="directToPage5()">Prev page</button>
+        <button onclick="directToHome()">Home</button>
+      </div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+
+    <script>
+      const directToHome = () => {
+        document.location.href = "index.html";
+      };
+      const directToPage5 = () => {
+        document.location.href = "Page5.html";
+      };
+      var margin = { top: 20, right: 20, bottom: 60, left: 80 },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      // append a 'group' element to 'svg'
+      // moves the 'group' element to the top left margin
+      var svg = d3
+        .select(".svg-container")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      var parseTime = d3.timeParse("%Y");
+
+      var x = d3.scaleTime().range([0, width]),
+        y = d3.scaleLinear().range([height, 0]),
+        z = d3.scaleOrdinal(d3.schemeCategory10);
+
+      //d3.line
+      var line = d3
+        .line()
+        .curve(d3.curveLinear)
+        .x((d) => x(d.value.date))
+        .y((d) => y(d.value.mean));
+
+      var averageline = d3
+        .line()
+        .curve(d3.curveCatmullRom)
+        .x((d) => x(d.value.date))
+        .y((d) => y(d.value.mean));
+
+      // read in data
+      data = d3.csv("data.csv").then((data) => {
+        data.forEach((d) => {
+          d.date = parseTime(d.Year);
+          d.value = +d["Value"];
+        });
+
+        // Sort states into regions so our data isn't comparing apples to oranges
+        data.map((d) => {
+          if (
+            d.State == "Connecticut" ||
+            d.State == "Maine" ||
+            d.State == "Massachusetts" ||
+            d.State == "New Hampshire" ||
+            d.State == "Rhode Island" ||
+            d.State == "Vermont"
+          ) {
+            d.Region = "New England";
+          } else if (
+            d.State == "New York" ||
+            d.State == "New Jersey" ||
+            d.State == "Delaware" ||
+            d.State == "Maryland" ||
+            d.State == "Pennsylvania"
+          ) {
+            d.Region = "Mid-Atlantic";
+          } else if (
+            d.State == "West Virginia" ||
+            d.State == "Virginia" ||
+            d.State == "Kentucky" ||
+            d.State == "Tennessee" ||
+            d.State == "Arkansas" ||
+            d.State == "Tennessee" ||
+            d.State == "North Carolina" ||
+            d.State == "South Carolina" ||
+            d.State == "Georgia" ||
+            d.State == "Alabama" ||
+            d.State == "Louisiana" ||
+            d.State == "Florida"
+          ) {
+            d.Region = "Southeast";
+          } else if (
+            d.State == "North Dakota" ||
+            d.State == "South Dakota" ||
+            d.State == "Nebraska" ||
+            d.State == "Kansas" ||
+            d.State == "Minnesota" ||
+            d.State == "Iowa" ||
+            d.State == "Missouri" ||
+            d.State == "Wisconsin" ||
+            d.State == "Illinois" ||
+            d.State == "Michigan" ||
+            d.State == "Indiana" ||
+            d.State == "Ohio"
+          ) {
+            d.Region = "Midwest";
+          } else if (
+            d.State == "Montana" ||
+            d.State == "Idaho" ||
+            d.State == "Nevada" ||
+            d.State == "Wyoming" ||
+            d.State == "Utah" ||
+            d.State == "Colorado"
+          ) {
+            d.Region = "Rocky Mountains";
+          } else if (
+            d.State == "Arizona" ||
+            d.State == "Texas" ||
+            d.State == "New Mexico" ||
+            d.State == "Oklahoma"
+          ) {
+            d.Region = "Southwest";
+          } else d.Region = "Pacific Costal";
+        });
+
+        var Regions = d3
+          .nest()
+          .key((d) => d.Region)
+          .key((d) => d.Year)
+          .rollup((v) => {
+            return {
+              date: v[0].date,
+              mean: d3.mean(v, (d) => d.value),
+            };
+          })
+          .entries(data);
+
+        console.log(Regions);
+
+        var average = d3
+          .nest()
+          .key((d) => d.date)
+          .rollup((v) => {
+            return {
+              date: v[0].date,
+              mean: d3.mean(v, (d) => d.value),
+            };
+          })
+          .entries(data);
+
+        // average.sort((a, b) => d3.ascending(a.value.date, b.value.date));
+
+        x.domain(d3.extent(data, (d) => d.date));
+        y.domain([
+          8000,
+          d3.max(Regions, (c) => d3.max(c.values, (d) => d.value.mean)) + 1000
+        ]);
+        z.domain(Regions.map((c) => c.key));
+
+        svg
+          .append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
+
+        // append y axis
+        svg
+          .append("g")
+          .attr("class", "axis axis--y")
+          .call(d3.axisLeft(y))
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", "0.71em")
+          .attr("fill", "#000");
+
+        // append y axis label
+        svg
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("x", -(height / 2))
+          .attr("y", -55)
+          .style("text-anchor", "middle")
+          .text("Tuition Price ($)");
+
+        // append x axis label
+        svg
+          .append("text")
+          .attr("x", width / 2)
+          .attr("y", height + 45)
+          .style("text-anchor", "middle")
+          .text("Year");
+
+        // enter avg line
+        var region = svg
+          .selectAll(".Region")
+          .data(Regions)
+          .enter()
+          .append("g")
+          .attr("class", "Region");
+
+        // append all lines
+        region
+          .append("path")
+          .attr("class", "line")
+          .attr("d", (d) => line(d.values))
+          .style("stroke", (d) => z(d.key));
+
+        svg
+          .append("path")
+          .datum(average)
+          .attr("fill", "none")
+          .attr("stroke", "black")
+          .attr("stroke-linejoin", "round")
+          .attr("stroke-linecap", "round")
+          .attr("stroke-width", 2)
+          .style("stroke-dasharray", "5 5")
+          .attr("d", averageline);
+
+        //How big the legand box is
+        var legendBox = 140;
+
+        // draw legend
+        console.log(Regions);
+
+        var legend = svg
+          .selectAll(".legend")
+          .data(Regions)
+          .enter()
+          .append("g")
+          .attr("class", "legend")
+          .attr("transform", function (d, i) {
+            return "translate(0," + i * 20 + ")";
+          })
+          .on("mouseover", function () {
+            //mouse over functions to fade
+            d3.select(this)
+              .select("rect")
+              .style("stroke", (d) => z(d.key))
+              .style("opacity", 0.5);
+          })
+          .on("mouseout", function () {
+            //leave opaque when not mousing over
+            d3.select(this)
+              .select("rect")
+              .style("stroke", "none")
+              .style("opacity", 1.0);
+          })
+          .on("click", function (d) {
+            //when click
+            region.style("stroke-width", 2).style("stroke-opacity", 1);
+
+            region
+              .filter((e) => e.key !== d.key) //filter unclicked lines
+              .style("stroke-width", 1)
+              .style("stroke-opacity", 0.1);
+          });
+        // draw legend colored rectangles
+        legend
+          .append("rect")
+          .attr("x", 10)
+          .attr("y", 0)
+          .attr("rx", 5)
+          .attr("width", legendBox)
+          .attr("height", 20)
+          .style("fill", (d) => z(d.key));
+
+        // draw legend text
+        legend
+          .append("text")
+          .attr("x", 10 + legendBox / 2)
+          .attr("y", 9)
+          .attr("dy", ".35em")
+          .attr("text-anchor", "middle")
+          .style("pointer-events", "none")
+          .text((d) => d.key);
+      });
+    </script>
+    <style>
+      .nav-buttons-container {
+        display: flex;
+        width: 960px;
+        justify-content: space-between;
+      }
+      button {
+        padding: 10px;
+        font-size: 20px;
+        font-family: "Alata", sans-serif;
+      }
+      body {
+        font-family: "Alata", sans-serif;
+      }
+      .img-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 30px 0px 20px 0px;
+      }
+      .p-container {
+        width: 960px;
+        margin-bottom: 20px;
+      }
+
+      .follow-up {
+        margin-top: 20px;
+      }
+
+      .caption {
+        color: grey;
+        margin-bottom: -5px;
+        font-size: 14px;
+      }
+
+      .bar-chart {
+        border: solid 1px black;
+        background-color: rgb(255, 255, 255);
+      }
+      .bar {
+        fill: rgb(140, 140, 140);
+      }
+      .label {
+        font-size: 9pt;
+      }
+      .category {
+        text-anchor: end;
+      }
+      .title-container {
+        width: 960px;
+        text-align: center;
+      }
+      .page-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .axis--x path {
+        stroke: black;
+      }
+
+      .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+    </style>
+  </body>
+</html>

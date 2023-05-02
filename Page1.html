@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alata&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Final Project</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="title-container">
+        <h1>
+          What Region in America Demands the Prettiest Penny to Attend College?
+        </h1>
+      </div>
+      <div class="nav-buttons-container">
+        <button onclick="directToHome()">Home</button>
+        <button onclick="directToPage2()">Next page</button>
+      </div>
+      <div class="p-container">
+        <p>
+          Every year, millions of young adults venture off to new colleges or
+          institutions. If you're reading this, you may even remember what your
+          decision process was like. For some people, it's important that their
+          future school is big or small. Perhaps some incoming freshmen are just
+          looking for an engineering program. Or maybe it's critical that their
+          new home has a good football team. For many students, some of the most
+          important factors may be location or price. Unfortunately, the price
+          tag disproportionately affects students because we do not all come
+          from the same socioeconomic backgrounds. By analyzing our dataset,
+          constructed using data from the National Center for Education
+          Statistics Annual Digest, we hope to identify the most expensive
+          region to pursue an undergraduate-level education. This dataset
+          consists of the average costs to attend 4-year undergraduate-level
+          programs in different states and, using this chart, we hope to answer
+          the following question: what region in the United States has the
+          highest dollar-value barrier to enrolling in college?
+        </p>
+      </div>
+      <div class="svg-container"></div>
+      <div class="p-container follow-up">
+        <p>
+          As we can see from the bar chart, the Rocky Mountains region stands
+          alone with an average tuition cost of $21,524. This is the cheapest
+          region to attend a 4-year undergraduate institution in the United
+          States based on our chart. Ironically, the Midwest finds itself in the
+          middle of the pack with an average tuition price of $27,571. Finally,
+          the New England region looks down at the rest of America with an
+          average tuition cost of $37,052. College tuition prices can have a
+          significant impact on students' financial well-being, especially those
+          from marginalized communities. High tuition costs can lead to
+          significant student debt, which can have long-term implications for
+          economic justice. It is concerning that a student in New England is
+          likely to pay almost 50% more for the same degree than someone
+          studying in the Rocky Mountains region. This disparity
+          disproportionately affects students and creates barriers for those
+          aspiring to break away from the towns they grew up in.
+        </p>
+      </div>
+      <div class="p-container caption">
+        <p>
+          Below is a table outlining how we distributed the fifty states into
+          seven regions
+        </p>
+      </div>
+      <div class="table-container">
+        <table class="tg">
+          <thead>
+            <tr>
+              <th class="tg-efmj" colspan="7">7 Regions of America</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="tg-14m1">New England</td>
+              <td class="tg-14m1">Pacific Costal</td>
+              <td class="tg-14m1">Mid-Atlantic</td>
+              <td class="tg-14m1">Midwest</td>
+              <td class="tg-14m1">Southeast</td>
+              <td class="tg-14m1">Southwest</td>
+              <td class="tg-14m1">Rocky Mountains</td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo">Connecticut</td>
+              <td class="tg-8jgo">Alaska</td>
+              <td class="tg-8jgo">Deleware</td>
+              <td class="tg-8jgo">Illinois</td>
+              <td class="tg-8jgo">Alabama</td>
+              <td class="tg-8jgo">Arizona</td>
+              <td class="tg-8jgo">Colorado</td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo">Maine</td>
+              <td class="tg-8jgo">California</td>
+              <td class="tg-8jgo">Maryland</td>
+              <td class="tg-8jgo">Indiana</td>
+              <td class="tg-8jgo">Arkansas</td>
+              <td class="tg-8jgo">New Mexico</td>
+              <td class="tg-8jgo">Idaho</td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo">Massachusetts</td>
+              <td class="tg-8jgo">Hawaii</td>
+              <td class="tg-8jgo">New Jersey</td>
+              <td class="tg-8jgo">Iowa</td>
+              <td class="tg-8jgo">Florida</td>
+              <td class="tg-8jgo">North Carolina</td>
+              <td class="tg-8jgo">Montana</td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo">New Hampshire</td>
+              <td class="tg-8jgo">Oregon</td>
+              <td class="tg-8jgo">New York</td>
+              <td class="tg-8jgo">Kansas</td>
+              <td class="tg-8jgo">Georgia</td>
+              <td class="tg-8jgo">Texas</td>
+              <td class="tg-8jgo">Nevada</td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo">Rhode Island</td>
+              <td class="tg-8jgo">Washington</td>
+              <td class="tg-8jgo">Pennsylvania</td>
+              <td class="tg-8jgo">Michigan</td>
+              <td class="tg-8jgo">Kentucky</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">Utah</td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo">Vermont</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">District of Columbia*</td>
+              <td class="tg-8jgo">Minnesota</td>
+              <td class="tg-8jgo">Mississippi</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">Wyoming</td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">Missouri</td>
+              <td class="tg-8jgo">Lousiana</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">Nebraska</td>
+              <td class="tg-8jgo">North Carolina</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">North Dakota</td>
+              <td class="tg-8jgo">South Carolina</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">Ohio</td>
+              <td class="tg-8jgo">Tennessee</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">South Dakota</td>
+              <td class="tg-8jgo">Virginia</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+            </tr>
+            <tr>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo">Wisconsin</td>
+              <td class="tg-8jgo">West Virginia</td>
+              <td class="tg-8jgo"></td>
+              <td class="tg-8jgo"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="nav-buttons-container follow-up">
+        <button onclick="directToHome()">Home</button>
+        <button onclick="directToPage2()">Next page</button>
+      </div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+      .nav-buttons-container {
+        display: flex;
+        width: 960px;
+        justify-content: space-between;
+      }
+      button {
+        padding: 10px;
+        font-family: "Alata", sans-serif;
+        font-size: 20px;
+      }
+      body {
+        font-family: "Alata", sans-serif;
+      }
+      .img-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 30px 0px 20px 0px;
+      }
+      .p-container {
+        width: 960px;
+        margin-bottom: 20px;
+      }
+
+      .follow-up {
+        margin-top: 20px;
+      }
+
+      .caption {
+        color: grey;
+        margin-bottom: -5px;
+        font-size: 14px;
+      }
+
+      .bar-chart {
+        background-color: rgb(255, 255, 255);
+      }
+      .bar {
+        fill: rgb(162, 221, 156);
+      }
+      .label {
+        font-size: 9pt;
+      }
+      .category {
+        text-anchor: end;
+      }
+      .title-container {
+        width: 960px;
+        text-align: center;
+      }
+      .page-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        text-align: center;
+        width: 960px;
+      }
+      .tg td {
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+      }
+      .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+      }
+      .tg .tg-8jgo {
+        border-color: #ffffff;
+        text-align: center;
+        vertical-align: top;
+      }
+      .tg .tg-efmj {
+        background-color: #cccccc;
+        border-color: #000000;
+        text-align: center;
+        vertical-align: top;
+      }
+      .tg .tg-8r7r {
+        background-color: #e7e7e7;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top;
+      }
+      .tg .tg-14m1 {
+        background-color: rgb(240, 240, 240);
+        border-color: #000000;
+      }
+    </style>
+    <script>
+      const directToHome = () => {
+        document.location.href = "index.html";
+      };
+      const directToPage2 = () => {
+        document.location.href = "Page2.html";
+      };
+
+      var margin = { top: 20, right: 20, bottom: 60, left: 80 },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+      var svg = d3
+        .select(".svg-container")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("class", "bar-chart")
+        .append("g") //group
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      //read in the data
+      data = d3.csv("data.csv").then((data) => {
+        // filter for year 2021
+        data = data.filter((d) => d.Year === "2021");
+        data.forEach((d) => {
+          d.Year = +d.Year; //convert to number
+          d.Value = +d.Value;
+        });
+        data = data.filter(
+          (d) => d.Length === "4-year" && d.Expense === "Fees/Tuition"
+        );
+
+        avgData = {}; //map
+
+        // Sort states into regions
+        const region = (d) => {
+          if (
+            d.State == "Connecticut" ||
+            d.State == "Maine" ||
+            d.State == "Massachusetts" ||
+            d.State == "New Hampshire" ||
+            d.State == "Rhode Island" ||
+            d.State == "Vermont"
+          ) {
+            return "New England";
+          } else if (
+            d.State == "New York" ||
+            d.State == "New Jersey" ||
+            d.State == "Delaware" ||
+            d.State == "Maryland" ||
+            d.State == "Pennsylvania" || 
+            d.State == "District of Columbia"
+          ) {
+            return "Mid-Atlantic";
+          } else if (
+            d.State == "West Virginia" ||
+            d.State == "Virginia" ||
+            d.State == "Kentucky" ||
+            d.State == "Tennessee" ||
+            d.State == "Arkansas" ||
+            d.State == "North Carolina" ||
+            d.State == "South Carolina" ||
+            d.State == "Georgia" ||
+            d.State == "Alabama" ||
+            d.State == "Mississippi" ||
+            d.State == "Louisiana" ||
+            d.State == "Florida"
+          ) {
+            return "Southeast";
+          } else if (
+            d.State == "North Dakota" ||
+            d.State == "South Dakota" ||
+            d.State == "Nebraska" ||
+            d.State == "Kansas" ||
+            d.State == "Minnesota" ||
+            d.State == "Iowa" ||
+            d.State == "Missouri" ||
+            d.State == "Wisconsin" ||
+            d.State == "Illinois" ||
+            d.State == "Michigan" ||
+            d.State == "Indiana" ||
+            d.State == "Ohio"
+          ) {
+            return "Midwest";
+          } else if (
+            d.State == "Montana" ||
+            d.State == "Idaho" ||
+            d.State == "Nevada" ||
+            d.State == "Wyoming" ||
+            d.State == "Utah" ||
+            d.State == "Colorado"
+          ) {
+            return "Rocky Mountains";
+          } else if (
+            d.State == "Arizona" ||
+            d.State == "Texas" ||
+            d.State == "New Mexico" ||
+            d.State == "Oklahoma"
+          ) {
+            return "Southwest";
+          } else return "Pacific Costal";
+        };
+
+        data.forEach((d) => {
+          const currRegion = region(d);
+          if (!avgData.hasOwnProperty(currRegion)) {
+            //if id not in object
+            avgData[currRegion] = {
+              year: d.Year,
+              states: new Set(),
+              values: [],
+              region: currRegion,
+            };
+          }
+          avgData[currRegion].values.push(d.Value);
+          avgData[currRegion].states.add(d.State);
+        });
+
+        avgData = d3.values(avgData); //convert to array
+        avgData.forEach((d) => {
+          d.values = d3.mean(d.values);
+          // console.log(d.region + " " + d.values);
+        });
+        avgData = avgData
+          .slice()
+          .sort((a, b) => d3.descending(a.values, b.values));
+
+        //axes
+        x = d3
+          .scaleBand()
+          .rangeRound([0, width])
+          .padding(0.1)
+          .domain(avgData.map((d) => d.region));
+        y = d3
+          .scaleLinear()
+          .rangeRound([height, 0])
+          .domain([0, d3.max(avgData, (d) => d.values)]);
+
+        console.log(avgData);
+        const entries = svg
+          .selectAll("g") // group
+          .data(avgData) // bind the data
+          .enter() // every element in data will have a g at the end
+          .append("g")
+          .append("rect")
+          .attr("class", "bar")
+          .attr("x", (d) => x(d.region))
+          .attr("width", x.bandwidth)
+          .attr("y", (d) => y(d.values))
+          .attr("height", (d) => height - y(d.values))
+          .attr("stroke", "green");
+
+        svg
+          .append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
+        svg.append("g").call(d3.axisLeft(y));
+        svg
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("x", -(height / 2))
+          .attr("y", -55)
+          .style("text-anchor", "middle")
+          .text("Tuition Price ($)");
+        svg
+          .append("text")
+          .attr("x", width / 2)
+          .attr("y", height + 45)
+          .style("text-anchor", "middle")
+          .text("7 Regions of the United States");
+      });
+    </script>
+  </body>
+</html>

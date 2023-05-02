@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alata&display=swap"
+      rel="stylesheet"
+    />
+    <title>Final Project</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="title-container">
+        <h1>The Increasing Cost of College in Each Region</h1>
+      </div>
+      <div class="nav-buttons-container">
+        <button onclick="directToPage4()">Prev page</button>
+        <button onclick="directToHome()">Home</button>
+        <button onclick="directToPage6()">Next page</button>
+      </div>
+      <div class="p-container">
+        <p>
+          The following parallel chart contains data pulled from three separate
+          datasets linked at the bottom of the page. Each line of the visual
+          represents one of the 50 States and its color denotes which region
+          that state maps to (view breakdown of regions in table below). The
+          dataset includes median income, average population of white residents,
+          average cost of college tuition for a four-year undergraduate program,
+          and the average percent of minority students enrolled in colleges for
+          each state. This visual aims to uncover and identify patterns and
+          relationships between these variables. To isolate one specific region,
+          hover over the color you want to highlight. Additionally, try clicking
+          on and interacting with our legend to enable or disable certain lines.
+        </p>
+      </div>
+      <div class="svg-container"></div>
+      <div class="p-container follow-up">
+        <p>
+          This visual offers valuable insights into the relationship between
+          socioeconomic factors and educational dynamics in different states and
+          regions across the United States. One of the most striking
+          observations we found is the relationship between the concentration of
+          white residents and the minority representation of institutions in
+          each state. The Midwest and Rocky Mountain regions have higher
+          concentrations of white residents, with corresponding low minority
+          representation in their educational institutions. In terms of
+          community dynamics, this pattern suggests that communities in these
+          regions may be more homogenous and less diverse compared to other
+          regions in the country. As a result, this may lead to a lack of
+          exposure to different cultural perspectives, which could impact social
+          cohesion and understanding of different backgrounds in these
+          communities.
+          <br /><br />
+          Furthermore, our analysis reveals a disparity between regions in terms
+          of racial diversity within educational institutions. As previously
+          noted, the New England and Midwest regions, which have some of the
+          highest average tuitions, also exhibit lower minority student
+          representation. This relationship demonstrates that racial and ethnic
+          diversity within educational institutions is not equally distributed
+          across the country, which may affect the overall sense of community
+          and inclusiveness within these regions.
+          <br /><br />
+          As we delve deeper into the relationship between socioeconomic factors
+          and educational dynamics in the United States, another noteworthy
+          finding from our analysis is the correlation between median income and
+          college tuition costs. States with higher median incomes, such as
+          Connecticut, Massachusetts, and New Jersey, tend to have higher
+          average tuition costs. This relationship suggests that communities
+          with higher incomes may prioritize investing in education, resulting
+          in higher demand for quality education, and subsequently, higher
+          tuition costs. However, this can create a barrier for individuals from
+          lower-income backgrounds, potentially limiting their access to higher
+          education and hindering their social mobility. The implications of
+          this observation are significant, as they suggest that the rising cost
+          of higher education can perpetuate inequality by excluding students
+          from low-income backgrounds. This issue calls for policies that ensure
+          equal access to education for all individuals and promote social
+          mobility regardless of socioeconomic status.
+          <br /><br />
+          In conclusion, our findings highlight significant regional disparities
+          in socioeconomic factors, diversity within educational institutions,
+          and community dynamics across the United States. It is crucial to
+          recognize these differences and address the barriers that hinder
+          access to education, promote equality, and foster a sense of
+          community. By doing so, we can work towards creating a more just and
+          equitable society that values diversity and offers equal opportunities
+          for all individuals, regardless of their background.
+        </p>
+      </div>
+      <div class="nav-buttons-container">
+        <button onclick="directToPage4()">Prev page</button>
+        <button onclick="directToHome()">Home</button>
+        <button onclick="directToPage6()">Next page</button>
+      </div>
+      <div class="sources-container">
+        <h2>Sources</h2>
+        <a href="https://nces.ed.gov/programs/digest/d18/tables/dt18_102.30.asp"
+          >Data on Median Income</a
+        >
+        <br />
+        <a
+          href="https://www.kaggle.com/datasets/bhargavchirumamilla/average-cost-of-undergraduate-student-by-state-usa"
+          >Average Cost of Undergraduate Programs by State
+        </a>
+        <br />
+        <a
+          href="https://www.governing.com/archive/state-minority-population-data-estimates.html"
+        >
+          State Population by Race and Ethnicity (2017)
+        </a>
+
+        <br />
+        <a
+          href="https://datacatalog.urban.org/dataset/racial-and-ethnic-representativeness-us-postsecondary-education-institutions/resource"
+        >
+          4-year College Representativeness
+        </a>
+      </div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+
+    <script>
+      const directToHome = () => {
+        document.location.href = "index.html";
+      };
+      const directToPage4 = () => {
+        document.location.href = "Page4.html";
+      };
+      const directToPage6 = () => {
+        document.location.href = "Page6.html";
+      };
+      var margin = { top: 60, right: 40, bottom: 60, left: 50 },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      // append a 'group' element to 'svg'
+      // moves the 'group' element to the top left margin
+      var svg = d3
+        .select(".svg-container")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      function findObjectByKey(array, key, value) {
+        for (let i = 0; i < array.length; i++) {
+          if (array[i][key] === value) {
+            return array[i];
+          }
+        }
+        return null;
+      }
+
+      Promise.all([
+        d3.csv("data.csv"),
+        d3.csv("raceData.csv"),
+        d3.csv("med-income.csv"),
+        d3.csv("state-pop-race.csv"),
+      ]).then(([data, collegeRaceData, medIncome, stateRaceData]) => {
+        // COLLEGE TUITION DATA
+        data = data.filter((d) => d.Year === "2017");
+        data.forEach((d) => {
+          d.value = +d["Value"];
+        });
+        data = data.filter(
+          (d) => d.Length === "4-year" && d.Expense === "Fees/Tuition"
+        );
+
+        // Sort states into regions so our data isn't comparing apples to oranges
+        data.map((d) => {
+          if (
+            d.State == "Connecticut" ||
+            d.State == "Maine" ||
+            d.State == "Massachusetts" ||
+            d.State == "New Hampshire" ||
+            d.State == "Rhode Island" ||
+            d.State == "Vermont"
+          ) {
+            d.Region = "New-England";
+          } else if (
+            d.State == "New York" ||
+            d.State == "New Jersey" ||
+            d.State == "Delaware" ||
+            d.State == "Maryland" ||
+            d.State == "Pennsylvania" ||
+            d.State == "District of Columbia"
+          ) {
+            d.Region = "Mid-Atlantic";
+          } else if (
+            d.State == "West Virginia" ||
+            d.State == "Virginia" ||
+            d.State == "Kentucky" ||
+            d.State == "Tennessee" ||
+            d.State == "Arkansas" ||
+            d.State == "Tennessee" ||
+            d.State == "North Carolina" ||
+            d.State == "South Carolina" ||
+            d.State == "Georgia" ||
+            d.State == "Alabama" ||
+            d.State == "Louisiana" ||
+            d.State == "Florida"
+          ) {
+            d.Region = "Southeast";
+          } else if (
+            d.State == "North Dakota" ||
+            d.State == "South Dakota" ||
+            d.State == "Nebraska" ||
+            d.State == "Kansas" ||
+            d.State == "Minnesota" ||
+            d.State == "Iowa" ||
+            d.State == "Missouri" ||
+            d.State == "Wisconsin" ||
+            d.State == "Illinois" ||
+            d.State == "Michigan" ||
+            d.State == "Indiana" ||
+            d.State == "Ohio"
+          ) {
+            d.Region = "Midwest";
+          } else if (
+            d.State == "Montana" ||
+            d.State == "Idaho" ||
+            d.State == "Nevada" ||
+            d.State == "Wyoming" ||
+            d.State == "Utah" ||
+            d.State == "Colorado"
+          ) {
+            d.Region = "Rocky-Mountains";
+          } else if (
+            d.State == "Arizona" ||
+            d.State == "Texas" ||
+            d.State == "New Mexico" ||
+            d.State == "Oklahoma"
+          ) {
+            d.Region = "Southwest";
+          } else d.Region = "Pacific-Costal";
+        });
+        // group by state and find avg tuition per state
+        data = d3
+          .nest()
+          .key((d) => d.State)
+          .rollup((v) => {
+            return {
+              avgTuition: d3.mean(v, (d) => d.value),
+              Region: v[0].Region,
+            };
+          })
+          .entries(data);
+
+        // COLLEGE RACE DATA
+        collegeRaceData = collegeRaceData.filter(
+          (d) => d.year === "2017" && d.slevel === "4-year" && d.col_white > 30
+        );
+        collegeRaceData = d3
+          .nest()
+          .key((d) => d.fips_ipeds)
+          .rollup((v) => {
+            return {
+              minorityRep: 100 - d3.mean(v, (d) => d.col_white),
+            };
+          })
+          .entries(collegeRaceData);
+
+        // STATE RACE DATA
+        stateRaceData = stateRaceData.map(function (d) {
+          return {
+            key: d.State,
+            percentWhite: +d.White,
+          };
+        });
+
+        stateRaceData = d3
+          .nest()
+          .key((d) => d.key)
+          .rollup((v) => {
+            return {
+              percentWhite: v[0].percentWhite,
+            };
+          })
+          .entries(stateRaceData);
+
+        // MEDIAN INCOME DATA
+        medIncome = medIncome.map(function (d) {
+          return {
+            state: d.State,
+            medianIncome: d["2019"],
+          };
+        });
+        medIncome.forEach((d) => {
+          d.medianIncome = d.medianIncome.replace(/,/g, "");
+          d.state = d.state.trim();
+        });
+
+        medIncome.forEach((d) => {
+          d.medianIncome = parseFloat(d.medianIncome);
+        });
+
+        medIncome = d3
+          .nest()
+          .key((d) => d.state)
+          .rollup((v) => {
+            return {
+              medianIncome: v[0].medianIncome,
+            };
+          })
+          .entries(medIncome);
+
+        // COMBINE DATA
+        let combinedData = data.map((d) => {
+          let newCollegeRaceData = findObjectByKey(
+            collegeRaceData,
+            "key",
+            d.key
+          );
+          let newStateRaceData = findObjectByKey(stateRaceData, "key", d.key);
+          let stateMedIncome = findObjectByKey(medIncome, "key", d.key);
+
+          return {
+            state: d.key,
+            region: d.value.Region,
+            avgTuition: d.value.avgTuition,
+            percentWhite: newStateRaceData.value.percentWhite,
+            minorityRep: newCollegeRaceData.value.minorityRep,
+            medianIncome: stateMedIncome.value.medianIncome,
+          };
+        });
+
+        let regions = [
+          "New-England",
+          "Pacific-Costal",
+          "Mid-Atlantic",
+          "Midwest",
+          "Southeast",
+          "Southwest",
+          "Rocky-Mountains",
+        ];
+        // Color scale: give me a region name, I return a color
+        const colors = [
+          "#FF4136",
+          "#FFDC00",
+          "#2ECC40",
+          "#0074D9",
+          "#FF851B",
+          "#B10DC9",
+          "#39CCCC",
+        ];
+
+        var color = d3.scaleOrdinal().domain(regions).range(colors);
+
+        // Here I set the list of dimension manually to control the order of axis:
+        let dimensions = [
+          "medianIncome",
+          "percentWhite",
+          "avgTuition",
+          "minorityRep",
+        ];
+
+        // For each dimension, I build a linear scale. I store all in a y object
+        var y = {};
+
+        for (var i = 0; i < dimensions.length; i++) {
+          name = dimensions[i];
+          y[name] = d3
+            .scaleLinear()
+            .domain([0, 100]) // --> Same axis range for each group
+            .range([height, 0]);
+        }
+        y["medianIncome"] = d3
+          .scaleLinear()
+          .domain([0, 100000]) // --> Same axis range for each group
+          .range([height, 0]);
+
+        y["avgTuition"] = d3
+          .scaleLinear()
+          .domain([0, 35000]) // --> Same axis range for each group
+          .range([height, 0]);
+
+        // Build the X scale -> it find the best position for each Y axis
+        x = d3.scalePoint().range([0, width]).domain(dimensions);
+
+        // Highlight the specie that is hovered
+        var highlight = function (d) {
+          selectedRegion = d.region;
+
+          // first every group turns grey
+          d3.selectAll(".line")
+            .transition()
+            .duration(200)
+            .style("stroke", "lightgrey")
+            .style("opacity", "0.2");
+          // Second the hovered specie takes its color
+          d3.selectAll("." + selectedRegion)
+            .transition()
+            .duration(200)
+            .style("stroke", color(selectedRegion))
+            .style("opacity", "1");
+        };
+
+        // Unhighlight
+        var doNotHighlight = function (d) {
+          d3.selectAll(".line")
+            .transition()
+            .duration(200)
+            .delay(700)
+            .style("stroke", function (d) {
+              return color(d.region);
+            })
+            .style("opacity", "1");
+        };
+
+        // The path function take a row of the csv as input, and return x and y coordinates of the line to draw for this raw.
+        function path(d) {
+          return d3.line().curve(d3.curveBasis)(
+            dimensions.map(function (p) {
+              return [x(p), y[p](d[p])];
+            })
+          );
+        }
+
+        // Draw the lines
+        console.log(combinedData);
+        svg
+          .selectAll("myPath")
+          .data(combinedData)
+          .enter()
+          .append("path")
+          .attr("class", function (d) {
+            return "line " + d.region;
+          }) // 2 class for each line: 'line' and the group name
+          .attr("d", path)
+          .style("fill", "none")
+          .style("stroke", function (d) {
+            return color(d.region);
+          })
+          .on("mouseover", highlight)
+          .on("mouseleave", doNotHighlight);
+
+        // Draw the axis:
+        svg
+          .selectAll("myAxis")
+          // For each dimension of the dataset I add a 'g' element:
+          .data(dimensions)
+          .enter()
+          .append("g")
+          .attr("class", "axis")
+          // I translate this element to its right position on the x axis
+          .attr("transform", function (d) {
+            return "translate(" + x(d) + ")";
+          })
+          // And I build the axis with the call function
+          .each(function (d) {
+            d3.select(this).call(d3.axisLeft().ticks(5).scale(y[d]));
+          })
+          // Add axis title
+          .append("text")
+          .style("text-anchor", "middle")
+          .attr("y", -9)
+          .text(function (d) {
+            return d;
+          })
+          .style("fill", "black");
+
+        //
+        var legendBox = 140;
+
+        var region = svg.selectAll(".line path");
+
+        // attach click event listener to legend groups
+        var legend = svg
+          .selectAll(".legend")
+          .data(regions)
+          .enter()
+          .append("g")
+          .attr("class", "legend")
+          .attr("transform", function (d, i) {
+            return "translate(0," + i * 20 + ")";
+          })
+          .on("click", function (d) {
+            // mouse click functions to toggle visibility
+            var active = d3.selectAll(".line." + d).style("opacity") != 0.1;
+            d3.selectAll(".line." + d)
+              .transition()
+              .duration(200)
+              .style("opacity", active ? 0.1 : 1);
+          });
+
+        legend
+          .append("rect")
+          .attr("y", height / 1.5 - 20)
+          .attr("x", 20)
+          .attr("width", 18)
+          .attr("height", 18)
+          .style("fill", color);
+
+        legend
+          .append("text")
+          .attr("x", 42)
+          .attr("y", height / 1.5 - 11)
+          .attr("dy", ".35em")
+          .style("text-anchor", "start")
+          .text(function (d) {
+            return d;
+          });
+      });
+    </script>
+    <style>
+      .sources-container a {
+        margin-left: 20px;
+      }
+      .sources-container {
+        width: 960px;
+      }
+      .legend {
+        cursor: pointer;
+      }
+      .axis {
+        opacity: 0.4;
+      }
+      .axis:hover {
+        opacity: 1;
+      }
+      .nav-buttons-container {
+        display: flex;
+        width: 960px;
+        justify-content: space-between;
+      }
+      button {
+        padding: 10px;
+        font-size: 20px;
+        font-family: "Alata", sans-serif;
+      }
+      body {
+        font-family: "Alata", sans-serif;
+      }
+      .img-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 30px 0px 20px 0px;
+      }
+      .p-container {
+        width: 960px;
+        margin-bottom: 20px;
+      }
+
+      .follow-up {
+        margin-top: 20px;
+      }
+
+      .caption {
+        color: grey;
+        margin-bottom: -5px;
+        font-size: 14px;
+      }
+
+      .bar-chart {
+        border: solid 1px black;
+        background-color: rgb(255, 255, 255);
+      }
+      .bar {
+        fill: rgb(140, 140, 140);
+      }
+      .label {
+        font-size: 9pt;
+      }
+      .category {
+        text-anchor: end;
+      }
+      .title-container {
+        width: 960px;
+        text-align: center;
+      }
+      .page-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .axis--x path {
+        stroke: black;
+      }
+
+      .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+    </style>
+  </body>
+</html>

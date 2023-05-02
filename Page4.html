@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alata&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Final Project</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="title-container">
+        <h1>College Cost as a Percent of Income</h1>
+      </div>
+      <div class="nav-buttons-container">
+        <button onclick="directToPage3()">Prev page</button>
+        <button onclick="directToHome()">Home</button>
+        <button onclick="directToPage5()">Next page</button>
+      </div>
+      <div class="p-container">
+        <p>
+          This visual represents of the ratio of a state's median income to its
+          average cost of college tuition and provides a unique perspective on
+          the affordability of higher education in different states. In a world
+          where higher education is increasingly important for achieving success
+          and upward mobility, it is crucial to understand the relationship
+          between income and education. By exploring this relationship through
+          this choreograph of the United States, we can gain valuable insights
+          into the state of higher education affordability in America. To
+          calculate the ratio for each state, we divided the median income of
+          the state by its average cost of college tuition. This visual enables
+          us to compare and contrast the affordability of higher education in
+          different states, uncovering the underlying disparities between them.
+          Understanding these disparities is vital to creating a more equitable
+          and just future for all. One question that this visual can help answer
+          is, "How does the affordability of higher education vary across the
+          United States?"
+        </p>
+      </div>
+      <div class="svg-container"></div>
+      <div class="p-container follow-up">
+        <!-- Higher education is a fundamentaltool for upward mobility, and making it more accessible and affordable
+          is crucial for achieving social and economic justice. -->
+        <p>
+          This choreograph sheds light on the potential barriers that students
+          may face when considering higher education options in different parts
+          of the country. For example, if a student is from a state with a low
+          median income and high college tuition costs, they may face
+          considerable financial barriers to attend college in a state with
+          higher affordability. Furthermore, this choreograph can also
+          illustrate the impact of regional economic disparities on access to
+          higher education. Students from regions with lower economic
+          opportunities may face significant financial barriers to attend
+          college in other parts of the country. These barriers can perpetuate
+          existing economic disparities and limit opportunities for social and
+          economic mobility. By recognizing and understanding these potential
+          barriers, policymakers and educators can work towards creating more
+          equitable access to higher education. This could involve initiatives
+          such as increasing financial aid, improving regional economic
+          opportunities, and promoting more affordable higher education options
+          in areas where costs are high. Higher education is a fundamental tool
+          for upward mobility, and making it more accessible and affordable is
+          crucial for achieving social and economic justice. Ultimately,
+          addressing these barriers is essential to promoting greater access to
+          higher education and creating a more equitable society.
+        </p>
+      </div>
+      <div class="nav-buttons-container">
+        <button onclick="directToPage3()">Prev page</button>
+        <button onclick="directToHome()">Home</button>
+        <button onclick="directToPage5()">Next page</button>
+      </div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="https://d3js.org/queue.v1.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="d3-tip.js"></script>
+    <script>
+      const directToHome = () => {
+        document.location.href = "index.html";
+      };
+      const directToPage3 = () => {
+        document.location.href = "Page3.html";
+      };
+      const directToPage5 = () => {
+        document.location.href = "Page5.html";
+      };
+      var format = d3.format(".2%");
+
+      // Set tooltips
+      var tip = d3
+        .tip()
+        .attr("class", "d3-tip")
+        .offset([200, 0])
+        .html(function (d) {
+          return (
+            "<strong>State: </strong><span class='details'>" +
+            d.properties.name +
+            "<br></span>" +
+            "<strong>Ratio: </strong><span class='details'>" +
+            format(d.properties.value) +
+            "</span>"
+          );
+        });
+
+      //Width and height of map
+      var width = 960;
+      var height = 500;
+
+      var lowColor = "#f9f9f9";
+      var highColor = "#c82300 ";
+
+      // D3 Projection
+      var projection = d3
+        .geoAlbersUsa()
+        .translate([width / 2, height / 2]) // translate to center of screen
+        .scale([1000]); // scale things down so see entire US
+
+      // Define path generator
+      var path = d3
+        .geoPath() // path generator that will convert GeoJSON to SVG paths
+        .projection(projection); // tell path generator to use albersUsa projection
+
+      //Create SVG element and append map to the SVG
+      var svg = d3
+        .select(".svg-container")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      // Load in my states data!
+      d3.csv("statesdata1.csv", function (data) {
+        var dataArray = [];
+        for (var d = 0; d < data.length; d++) {
+          dataArray.push(parseFloat(data[d].value));
+        }
+        var minVal = d3.min(dataArray);
+        var maxVal = d3.max(dataArray);
+        var ramp = d3
+          .scaleLinear()
+          .domain([minVal, maxVal])
+          .range([lowColor, highColor]);
+
+        // Load GeoJSON data and merge with states data
+        d3.json("us-states.json", function (json) {
+          // Loop through each state data value in the .csv file
+          for (var i = 0; i < data.length; i++) {
+            // Grab State Name
+            var dataState = data[i].state;
+
+            // Grab data value
+            var dataValue = data[i].value;
+
+            // Find the corresponding state inside the GeoJSON
+            for (var j = 0; j < json.features.length; j++) {
+              var jsonState = json.features[j].properties.name;
+
+              if (dataState == jsonState) {
+                // Copy the data value into the JSON
+                json.features[j].properties.value = dataValue;
+
+                // Stop looking through the JSON
+                break;
+              }
+            }
+          }
+
+          svg.call(tip);
+
+          // Bind the data to the SVG and create one path per GeoJSON feature
+          svg
+            .selectAll("path")
+            .data(json.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .style("stroke", "grey")
+            .style("stroke-width", "1")
+            .style("fill", function (d) {
+              return ramp(d.properties.value);
+            })
+            .on("mouseover", function (d) {
+              tip.show(d);
+              d3.select(this)
+                .style("stroke", "#FFA500")
+                .style("stroke-width", 2)
+                .raise();
+            })
+            .on("mouseout", function (d) {
+              tip.hide(d);
+              d3.select(this).style("stroke", "grey").style("stroke-width", 1);
+            });
+
+          // add a legend
+          var w = 140,
+            h = 380;
+
+          var key = d3
+            .select(".svg-container")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+            .attr("class", "legend");
+
+          var legend = key
+            .append("defs")
+            .append("svg:linearGradient")
+            .attr("id", "gradient")
+            .attr("x1", "100%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "100%")
+            .attr("spreadMethod", "pad");
+
+          legend
+            .append("stop")
+            .attr("offset", "0%")
+            .attr("stop-color", highColor)
+            .attr("stop-opacity", 1);
+
+          legend
+            .append("stop")
+            .attr("offset", "100%")
+            .attr("stop-color", lowColor)
+            .attr("stop-opacity", 1);
+
+          key
+            .append("rect")
+            .attr("width", w - 100)
+            .attr("height", h)
+            .style("fill", "url(#gradient)")
+            .attr("transform", "translate(0,10)");
+
+          var y = d3.scaleLinear().range([h, 0]).domain([minVal, maxVal]);
+
+          var yAxis = d3.axisRight(y);
+
+          key
+            .append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(41,10)")
+            .call(yAxis);
+        });
+      });
+    </script>
+
+    <style>
+      /* Tooltip CSS */
+      .d3-tip {
+        line-height: 1.5;
+        font-weight: 400;
+        font-family: "avenir next", Arial, sans-serif;
+        padding: 6px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #ffa500;
+        border-radius: 1px;
+        pointer-events: none;
+      }
+
+      /* Northward tooltips */
+      .d3-tip.n:after {
+        content: "\25BC";
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+        text-align: center;
+      }
+
+      /* Eastward tooltips */
+      .d3-tip.e:after {
+        content: "\25C0";
+        margin: -4px 0 0 0;
+        top: 50%;
+        left: -8px;
+      }
+
+      /* Southward tooltips */
+      .d3-tip.s:after {
+        content: "\25B2";
+        margin: 0 0 1px 0;
+        top: -8px;
+        left: 0;
+        text-align: center;
+      }
+
+      /* Westward tooltips */
+      .d3-tip.w:after {
+        content: "\25B6";
+        margin: -4px 0 0 -1px;
+        top: 50%;
+        left: 100%;
+      }
+
+      .details {
+        color: white;
+      }
+
+      /* Legend Position Style */
+      .legend {
+        position: absolute;
+        left: 20px;
+        top: 30px;
+      }
+
+      .axis text {
+        font: 10px sans-serif;
+      }
+
+      .axis line,
+      .axis path {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+      .nav-buttons-container {
+        display: flex;
+        width: 960px;
+        justify-content: space-between;
+      }
+      button {
+        padding: 10px;
+        font-size: 20px;
+        font-family: "Alata", sans-serif;
+      }
+      body {
+        font-family: "Alata", sans-serif;
+      }
+      .img-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 30px 0px 20px 0px;
+      }
+      .p-container {
+        width: 960px;
+        margin-bottom: 20px;
+      }
+
+      .follow-up {
+        margin-top: 20px;
+      }
+
+      .caption {
+        color: grey;
+        margin-bottom: -5px;
+        font-size: 14px;
+      }
+
+      .bar-chart {
+        border: solid 1px black;
+        background-color: rgb(255, 255, 255);
+      }
+      .bar {
+        fill: rgb(140, 140, 140);
+      }
+      .label {
+        font-size: 9pt;
+      }
+      .category {
+        text-anchor: end;
+      }
+      .title-container {
+        width: 960px;
+        text-align: center;
+      }
+      .page-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .axis--x path {
+        stroke: black;
+      }
+
+      .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+      .svg-container {
+        position: relative;
+      }
+    </style>
+  </body>
+</html>

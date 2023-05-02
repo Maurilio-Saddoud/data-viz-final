@@ -1,0 +1,199 @@
+<body>
+    <h1>The increasing Cost of College in Each Region</h1>
+    <p>Overtime the cost in college is gradually increasing</p>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+  
+    <style>
+      * {
+        font-family: sans-serif;
+      }
+      .axis--x path {
+        stroke: black;
+      }
+  
+      .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+    </style>
+    <script>
+    var margin = {top: 20, right: 20, bottom: 20, left: 40},
+      width = 960 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      // append a 'group' element to 'svg'
+      // moves the 'group' element to the top left margin
+      var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+    var parseTime = d3.timeParse("%Y");
+
+    data = d3.csv("nces330_20.csv").then(data => {
+      data.forEach(d => {
+        d.date = parseTime(d.Year);
+        d.value = +d["Value"];
+      });
+
+      // Filter out 2-year institutions and expenses that include room and board
+
+      data = data.filter((d) => d.Length === "4-year" && d.Expense === "Fees/Tuition")
+
+      // Sort states into regions so our data isn't comparing apples to oranges
+
+      data.map(d => {
+        if (
+          d.State == "Connecticut" ||
+          d.State == "Maine" ||
+          d.State == "Massachusetts" ||
+          d.State == "New Hampshire" ||
+          d.State == "Rhode Island" ||
+          d.State == "Vermont"
+        ) {
+          d.Region = "New England";
+        } else if (
+          d.State == "New York" ||
+          d.State == "New Jersey" ||
+          d.State == "Delaware" ||
+          d.State == "Maryland" ||
+          d.State == "Pennsylvania"
+        ) {
+          d.Region = "Mid-Atlantic";
+        } else if (
+          d.State == "West Virginia" ||
+          d.State == "Virginia" ||
+          d.State == "Kentucky" ||
+          d.State == "Tennessee" ||
+          d.State == "Arkansas" ||
+          d.State == "Tennessee" ||
+          d.State == "North Carolina" ||
+          d.State == "South Carolina" ||
+          d.State == "Georgia" ||
+          d.State == "Alabama" ||
+          d.State == "Louisiana" ||
+          d.State == "Florida"
+        ) {
+          d.Region = "Southeast";
+        } else if (
+          d.State == "North Dakota" ||
+          d.State == "South Dakota" ||
+          d.State == "Nebraska" ||
+          d.State == "Kansas" ||
+          d.State == "Minnesota" ||
+          d.State == "Iowa" ||
+          d.State == "Missouri" ||
+          d.State == "Wisconsin" ||
+          d.State == "Illinois" ||
+          d.State == "Michigan" ||
+          d.State == "Indiana" ||
+          d.State == "Ohio"
+        ) {
+          d.Region = "Midwest";
+        } else if (
+          d.State == "Montana" ||
+          d.State == "Idaho" ||
+          d.State == "Nevada" ||
+          d.State == "Wyoming" ||
+          d.State == "Utah" ||
+          d.State == "Colorado"
+        ) {
+          d.Region = "Rocky Mountains";
+        } else if (
+          d.State == "Arizona" ||
+          d.State == "Texas" ||
+          d.State == "New Mexico" ||
+          d.State == "Oklahoma"
+        ) {
+          d.Region = "Southwest";
+        } else d.Region = "Pacific Costal";
+      });
+
+      // Then converted into a map to make each variable 
+      // unique and callable within their associated objects.
+
+      var Regions = d3.nest()
+        .key(d => d.Region)
+        .key(d => d.Year)
+        .rollup(v => {
+          return {
+            date: v[0].date,
+            mean: d3.mean(v, d => d.value)
+          }
+        })
+        .entries(data);
+
+      var average = d3.nest()
+          .key(d => d.date)
+          .rollup(v => {
+            return {
+              date: v[0].date,
+              mean: d3.mean(v, d => d.value)
+            }
+          })
+          .entries(data)
+
+      average.sort((a, b) => d3.ascending(a.value.date, b.value.date));
+
+      //d3.line
+      var line = d3.line()
+        .curve(d3.curveLinear)
+        .x(d => x(d.value.date))
+        .y(d => y(d.value.mean));
+
+      var averageline = d3.line()
+        .curve(d3.curveCatmullRom)
+        .x(d => x(d.value.date))
+        .y(d => y(d.value.mean));
+
+      var x = d3.scaleTime().range([0, width]),
+          y = d3.scaleLinear().range([height, 0]),
+          z = d3.scaleOrdinal(d3.schemeCategory10);
+
+      x.domain(d3.extent(data, d => d.date));
+      y.domain([0,d3.max(Regions, c => d3.max(c.values, d => d.value.mean))]);
+      z.domain(Regions.map(c => c.key));
+
+      svg.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
+
+      svg.append("g")
+          .attr("class", "axis axis--y")
+          .call(d3.axisLeft(y))
+          .append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 6)
+              .attr("dy", "0.71em")
+              .attr("fill", "#000")
+              .text("Cost of college by Region over time");
+
+      var region = svg.selectAll(".Region")
+          .data(Regions)
+          .enter().append("g")
+          .attr("class", "Region");
+
+      region.append("path")
+          .attr("class", "line")
+          .attr("d", d => line(d.values))
+          .style("stroke", d => z(d.key));
+
+      svg.append("path")
+        .datum(average)
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 2)
+        .style("stroke-dasharray", "5 5")
+        .attr("d", averageline);
+
+        });
+      
+</script>

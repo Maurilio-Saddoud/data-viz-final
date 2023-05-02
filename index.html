@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alata&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Final Project</title>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="top-container">
+        <div class="title-container">
+          <h1 class="title">
+            Exploring the Relationship Between the Price of College and its
+            Diversity
+          </h1>
+          <div>Trey Noe & Maurilio Saddoud</div>
+        </div>
+        <div class="content-container">
+          <div class="intro">
+            <p>
+              This project explores the relationship between the price to attend
+              college and the median household income of each region in America.
+              Specifically, we look at tuition cost and cencus data from each
+              state to explore which regions in America demand the prettiest
+              pennies to attend higher education institutions.
+            </p>
+            <p>
+              We then incorporate cencus data to investigate the relationships
+              between the price to attend college within a region, and the
+              median household incomes of those regions. We seek to answer if
+              the price of a college has any relationship to the median income
+              of the region in which it resides.
+            </p>
+            <p>
+              Do universities build barriers to entry for students living in
+              different regions?
+            </p>
+            <p>
+              Do universities reside in regions where its residents could not
+              afford tuition?
+            </p>
+            <p>
+              We are interested in these questions becuase the price to attend
+              college is usually the largest barrier when it comes to a
+              student's deciscion, and higher education should be accessible to
+              more than just those who can afford it.
+            </p>
+          </div>
+        </div>
+        <div class="down-arrow">
+          <img
+            src="down-arrow.png"
+            alt="down-arrow"
+            width="50px"
+            height="50px"
+          />
+        </div>
+      </div>
+      <div class="bottom-container">
+        <div class="button-row">
+          <button class="b1" onclick="directToPage1()">Page 1</button>
+          <button class="b2" onclick="directToPage2()">Page 2</button>
+          <button class="b3" onclick="directToPage3()">Page 3</button>
+        </div>
+        <div class="button-row">
+          <button class="b4" onclick="directToPage4()">Page 4</button>
+          <button class="b5" onclick="directToPage5()">Page 5</button>
+          <button class="b6" onclick="directToPage6()">Page 6</button>
+        </div>
+      </div>
+    </div>
+    <style>
+      body {
+        font-family: "Alata", sans-serif;
+        /* background-color: rgb(231, 231, 231); */
+        overflow-x: hidden;
+      }
+
+      .page-container {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .top-container {
+        width: 100%;
+        height: 100vh !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: rgb(74, 74, 74);
+        padding: 10px;
+        /* margin-top: -90px; */
+        position: relative;
+      }
+
+      .title {
+        margin: 0 0 20px 0;
+        text-align: center;
+      }
+
+      .content-container {
+        width: 70%;
+      }
+
+      .title-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .button-row {
+        display: flex;
+        width: 100%;
+        justify-content: space-evenly;
+      }
+
+      .down-arrow {
+        position: absolute;
+        bottom: 50px;
+        opacity: 40%;
+      }
+
+      button {
+        width: 200px;
+        height: 200px;
+        border-style: none;
+        border-radius: 100px;
+        cursor: pointer;
+      }
+
+      .b1 {
+        background-color: rgb(162, 221, 156) !important;
+        transition: transform 0.4s;
+        color: black;
+      }
+
+      .b2 {
+        background-color: rgb(238, 131, 0);
+        transition: transform 0.4s;
+      }
+
+      .b3 {
+        background-color: rgb(0, 198, 185);
+        transition: transform 0.4s;
+      }
+      .b4 {
+        background-color: rgb(162, 221, 156) !important;
+        transition: transform 0.4s;
+        color: black;
+      }
+
+      .b5 {
+        background-color: rgb(238, 131, 0);
+        transition: transform 0.4s;
+      }
+
+      .b6 {
+        background-color: rgb(0, 198, 185);
+        transition: transform 0.4s;
+      }
+
+      .bottom-container {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        background-color: rgb(231, 231, 231);
+        margin: 0px;
+        flex-direction: column;
+      }
+
+      @media screen and (max-width: 735px) {
+        .content-container {
+          width: 90%;
+        }
+      }
+
+      button:hover {
+        transform: scale(1.2);
+        animation-name: expand;
+      }
+
+      @keyframes expand {
+        from {
+          width: 100px;
+          height: 100px;
+        }
+
+        to {
+          width: 300px;
+          height: 250px;
+        }
+      }
+    </style>
+    <script>
+      const directToPage1 = () => {
+        document.location.href = "Page1.html";
+      };
+      const directToPage2 = () => {
+        document.location.href = "Page2.html";
+      };
+      const directToPage3 = () => {
+        document.location.href = "Page3.html";
+      };
+      const directToPage4 = () => {
+        document.location.href = "Page4.html";
+      };
+      const directToPage5 = () => {
+        document.location.href = "Page5.html";
+      };
+      const directToPage6 = () => {
+        document.location.href = "Page6.html";
+      };
+    </script>
+  </body>
+</html>
