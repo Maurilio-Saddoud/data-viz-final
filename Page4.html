@@ -86,6 +86,7 @@
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
     <script src="https://unpkg.com/d3-simple-slider"></script>
     <script src="d3-tip.js"></script>
+
     <script>
       const directToHome = () => {
         document.location.href = "index.html";
@@ -118,8 +119,8 @@
       var width = 960;
       var height = 500;
 
-      var lowColor = "#f9f9f9";
-      var highColor = "#c82300 ";
+      var lowColor = "#c82300";
+      var highColor = "#08589e";
 
       // D3 Projection
       var projection = d3
@@ -145,12 +146,13 @@
         for (var d = 0; d < data.length; d++) {
           dataArray.push(parseFloat(data[d].value));
         }
-        var minVal = d3.min(dataArray);
-        var maxVal = d3.max(dataArray);
-        var ramp = d3
-          .scaleLinear()
-          .domain([minVal, maxVal])
-          .range([lowColor, highColor]);
+        var minVal = d3.max(dataArray);
+        var maxVal = d3.min(dataArray);
+        var medianVal = d3.median(dataArray);
+        var colorScale = d3
+          .scaleDiverging()
+          .domain([minVal, medianVal, maxVal])
+          .interpolator(d3.interpolateRdBu);
 
         // Load GeoJSON data and merge with states data
         d3.json("us-states.json", function (json) {
@@ -186,20 +188,48 @@
             .append("path")
             .attr("d", path)
             .style("stroke", "grey")
+            .style("stroke", "#fff")
             .style("stroke-width", "1")
             .style("fill", function (d) {
-              return ramp(d.properties.value);
+              // Get data value
+              var value = d.properties.value;
+
+              if (value) {
+                // If value exists…
+                return colorScale(value);
+              } else {
+                // If value is undefined…
+                return "#ccc";
+              }
             })
             .on("mouseover", function (d) {
-              tip.show(d);
-              d3.select(this)
-                .style("stroke", "#FFA500")
-                .style("stroke-width", 2)
-                .raise();
+              tip.show(d, this);
+              d3.select(this).style("fill", "#F7DC6F");
             })
             .on("mouseout", function (d) {
-              tip.hide(d);
-              d3.select(this).style("stroke", "grey").style("stroke-width", 1);
+              tip.hide(d, this);
+              d3.select(this).style("fill", function (d) {
+                // Get data value
+                var value = d.properties.value;
+
+                if (value) {
+                  // If value exists…
+                  return colorScale(value);
+                } else {
+                  // If value is undefined…
+                  return "#ccc";
+                }
+              });
+            })
+            .on("click", function (d) {
+              var stateName = d.properties.name;
+              if (stateName === "Home") {
+                directToHome();
+              } else if (stateName === "Page 3") {
+                directToPage3();
+              } else if (stateName === "Page 5") {
+                directToPage5();
+              }
             });
 
           // add a legend
@@ -226,13 +256,19 @@
           legend
             .append("stop")
             .attr("offset", "0%")
-            .attr("stop-color", highColor)
+            .attr("stop-color", lowColor)
+            .attr("stop-opacity", 1);
+
+          legend
+            .append("stop")
+            .attr("offset", "50%")
+            .attr("stop-color", "#fff")
             .attr("stop-opacity", 1);
 
           legend
             .append("stop")
             .attr("offset", "100%")
-            .attr("stop-color", lowColor)
+            .attr("stop-color", highColor)
             .attr("stop-opacity", 1);
 
           key
@@ -242,7 +278,7 @@
             .style("fill", "url(#gradient)")
             .attr("transform", "translate(0,10)");
 
-          var y = d3.scaleLinear().range([h, 0]).domain([minVal, maxVal]);
+          var y = d3.scaleLinear().range([h, 0]).domain([maxVal, minVal]);
 
           var yAxis = d3.axisRight(y);
 

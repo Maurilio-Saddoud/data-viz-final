@@ -74,6 +74,13 @@
         <button onclick="directToHome()">Home</button>
         <button onclick="directToPage3()">Next page</button>
       </div>
+      <div class="sources-container">
+        <h2>Sources</h2>
+        <a
+          href="https://www.kaggle.com/datasets/bhargavchirumamilla/average-cost-of-undergraduate-student-by-state-usa"
+          >Average Cost of Undergraduate Programs by State
+        </a>
+      </div>
     </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://d3js.org/d3-queue.v3.min.js"></script>
@@ -355,6 +362,12 @@
       });
     </script>
     <style>
+      .sources-container a {
+        margin-left: 20px;
+      }
+      .sources-container {
+        width: 960px;
+      }
       .nav-buttons-container {
         display: flex;
         width: 960px;

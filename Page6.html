@@ -2,19 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Alata&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- <link
+      href="https://fonts.googleapis.com/css2?family=Alata&display=swap"
+      rel="stylesheet"
+    /> -->
     <title>Final Project</title>
   </head>
   <body>
     <div class="page-container">
       <div class="title-container">
-        <h1>The Increasing Cost of College in Each Region</h1>
+        <h1>College Affordability and Diversity Across US Regions</h1>
       </div>
       <div class="nav-buttons-container">
         <button onclick="directToPage5()">Prev page</button>
@@ -22,31 +27,100 @@
       </div>
       <div class="p-container">
         <p>
-          Below you can see a star chart that has several characteristics on it.
-          The green line represents the average cost of a 4-year degree broken
-          down into seven regions. the other lines represent various ethnic
-          groups within the US broken down into their percentage of the regions
-          average college attendance by said ethnic group. The largest and most
-          notable group would be those of European decent represented by the
-          grey line. As you can see white college students are the majority of
-          the four-year degree program participants in every region during the
-          year 2020. The Blue and Purple groups represent African American and
-          Latino Americans respectively.
+          The following visual is a bubble chart we have created using data on
+          median income, average tuition, and minority representation at
+          colleges and universities in different regions of the United States.
+          In this visualization, each bubble represents a state and is colored
+          based on its region, while the size of the bubble corresponds to the
+          percentage of minority students enrolled in higher education
+          institutions in that state. Feel free to interact with the chart by
+          hovering over bubbles to see the name of the state, and by clicking on
+          the legend to toggle the visibility of bubbles by region. This
+          visualization effectively conveys information about the relationship
+          between income, tuition, and minority representation in higher
+          education across different regions of the US. By examining trends in
+          the data, we can gain insights into the barriers that different groups
+          face in accessing higher education and the impact that this has on
+          economic and social mobility. Specifically, we can see that there are
+          significant disparities in tuition costs and median income across
+          different regions of the US, with the highest tuition costs and lowest
+          median incomes concentrated in the Northeast and West Coast. We can
+          also see that there is a strong positive correlation between median
+          income and average tuition, which suggests that economic inequality is
+          a major factor in college affordability.
         </p>
       </div>
       <div class="svg-container"></div>
       <div class="p-container follow-up">
         <p>
-          An interesting relationship seems to be developing between college
-          cost and representation. As cost goes up the relative diversity
-          amongst student bodies goes down. We believe this is due to the fact
-          that college cost is a larger barrier to those from marginalized and
-          low-income communities.
+          The first trend that stands out in the data is the positive
+          correlation between average tuition prices and median income. This is
+          particularly evident in the Midwest and New England regions, where
+          states with higher median incomes tend to have higher average
+          tuitions. This trend suggests that the cost of higher education is
+          closely tied to the economic prosperity of a region, which could lead
+          to issues with access and affordability for students from lower-income
+          backgrounds. Higher education is often seen as a key to upward
+          mobility and economic success, but high tuition costs can create
+          barriers for students who are already facing financial difficulties.
+          This can perpetuate inequality and limit opportunities for those who
+          are less financially privileged. Additionally, high tuition costs can
+          limit the diversity of the student body, creating a less inclusive and
+          less representative learning environment.
+          <br /><br />
+          Another trend identified shows that states in the Southeast and
+          Southwest regions have a higher minority representation, while the
+          Midwest and New England regions have a lower minority representation.
+          This could suggest issues with segregation and discrimination in
+          certain regions of the country. Such a disparity could be attributed
+          to historic patterns of discrimination and unequal access to education
+          and employment opportunities. Discrimination can create barriers that
+          prevent minority groups from fully participating in the social,
+          economic, and political aspects of society, leading to marginalization
+          and social injustice. As such, this trend highlights the ongoing need
+          to address systemic barriers and strive for greater equality and
+          inclusivity for all individuals, regardless of their race or
+          ethnicity.
+          <br /><br />
+          The final trend we noticed reveals a cluster of states in the Pacific
+          Coastal region with high median incomes, low average tuitions, and
+          high minority representation. This trend suggests that the Pacific
+          Coastal region may have a more equitable distribution of resources and
+          opportunities compared to other regions of the country. This
+          distribution could potentially be a result of progressive policies
+          that prioritize investments in education, social welfare, and job
+          creation. The region's commitment to equity and inclusivity is evident
+          in its low tuition fees, which suggest that higher education is
+          accessible and affordable to a wider range of students, regardless of
+          their socio-economic background. This trend illustrates the importance
+          of policies that promote economic and social justice, create a more
+          level playing field, and foster a sense of community that recognizes
+          and celebrates diversity. Overall, these trends highlight the critical
+          importance of addressing inequality, discrimination, and segregation
+          in creating a more just, equitable, and inclusive society.
         </p>
       </div>
       <div class="nav-buttons-container">
         <button onclick="directToPage5()">Prev page</button>
         <button onclick="directToHome()">Home</button>
+      </div>
+      <div class="sources-container">
+        <h2>Sources</h2>
+        <a href="https://nces.ed.gov/programs/digest/d18/tables/dt18_102.30.asp"
+          >Data on Median Income</a
+        >
+        <br />
+        <a
+          href="https://www.kaggle.com/datasets/bhargavchirumamilla/average-cost-of-undergraduate-student-by-state-usa"
+          >Average Cost of Undergraduate Programs by State
+        </a>
+
+        <br />
+        <a
+          href="https://datacatalog.urban.org/dataset/racial-and-ethnic-representativeness-us-postsecondary-education-institutions/resource"
+        >
+          4-year College Representativeness
+        </a>
       </div>
     </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -59,7 +133,8 @@
       const directToPage5 = () => {
         document.location.href = "Page5.html";
       };
-      var margin = { top: 20, right: 20, bottom: 60, left: 80 },
+
+      var margin = { top: 60, right: 40, bottom: 50, left: 70 },
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
@@ -74,31 +149,29 @@
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      var parseTime = d3.timeParse("%Y");
+      function findObjectByKey(array, key, value) {
+        for (let i = 0; i < array.length; i++) {
+          if (array[i][key] === value) {
+            return array[i];
+          }
+        }
+        return null;
+      }
 
-      var x = d3.scaleTime().range([0, width]),
-        y = d3.scaleLinear().range([height, 0]),
-        z = d3.scaleOrdinal(d3.schemeCategory10);
-
-      //d3.line
-      var line = d3
-        .line()
-        .curve(d3.curveLinear)
-        .x((d) => x(d.value.date))
-        .y((d) => y(d.value.mean));
-
-      var averageline = d3
-        .line()
-        .curve(d3.curveCatmullRom)
-        .x((d) => x(d.value.date))
-        .y((d) => y(d.value.mean));
-
-      // read in data
-      data = d3.csv("data.csv").then((data) => {
+      Promise.all([
+        d3.csv("data.csv"),
+        d3.csv("raceData.csv"),
+        d3.csv("med-income.csv"),
+        d3.csv("state-pop-race.csv"),
+      ]).then(([data, collegeRaceData, medIncome, stateRaceData]) => {
+        // COLLEGE TUITION DATA
+        data = data.filter((d) => d.Year === "2017");
         data.forEach((d) => {
-          d.date = parseTime(d.Year);
           d.value = +d["Value"];
         });
+        data = data.filter(
+          (d) => d.Length === "4-year" && d.Expense === "Fees/Tuition"
+        );
 
         // Sort states into regions so our data isn't comparing apples to oranges
         data.map((d) => {
@@ -110,13 +183,14 @@
             d.State == "Rhode Island" ||
             d.State == "Vermont"
           ) {
-            d.Region = "New England";
+            d.Region = "New-England";
           } else if (
             d.State == "New York" ||
             d.State == "New Jersey" ||
             d.State == "Delaware" ||
             d.State == "Maryland" ||
-            d.State == "Pennsylvania"
+            d.State == "Pennsylvania" ||
+            d.State == "District of Columbia"
           ) {
             d.Region = "Mid-Atlantic";
           } else if (
@@ -157,7 +231,7 @@
             d.State == "Utah" ||
             d.State == "Colorado"
           ) {
-            d.Region = "Rocky Mountains";
+            d.Region = "Rocky-Mountains";
           } else if (
             d.State == "Arizona" ||
             d.State == "Texas" ||
@@ -165,163 +239,345 @@
             d.State == "Oklahoma"
           ) {
             d.Region = "Southwest";
-          } else d.Region = "Pacific Costal";
+          } else d.Region = "Pacific-Costal";
+        });
+        // group by state and find avg tuition per state
+        data = d3
+          .nest()
+          .key((d) => d.State)
+          .rollup((v) => {
+            return {
+              avgTuition: d3.mean(v, (d) => d.value),
+              Region: v[0].Region,
+            };
+          })
+          .entries(data);
+
+        // COLLEGE RACE DATA
+        collegeRaceData = collegeRaceData.filter(
+          (d) => d.year === "2017" && d.slevel === "4-year" && d.col_white > 30
+        );
+        collegeRaceData = d3
+          .nest()
+          .key((d) => d.fips_ipeds)
+          .rollup((v) => {
+            return {
+              minorityRep: 100 - d3.mean(v, (d) => d.col_white),
+            };
+          })
+          .entries(collegeRaceData);
+
+        // STATE RACE DATA
+        stateRaceData = stateRaceData.map(function (d) {
+          return {
+            key: d.State,
+            percentWhite: +d.White,
+          };
         });
 
-        var Regions = d3
+        stateRaceData = d3
           .nest()
-          .key((d) => d.Region)
-          .key((d) => d.Year)
+          .key((d) => d.key)
           .rollup((v) => {
             return {
-              date: v[0].date,
-              mean: d3.mean(v, (d) => d.value),
+              percentWhite: v[0].percentWhite,
             };
           })
-          .entries(data);
+          .entries(stateRaceData);
 
-        console.log(Regions);
+        // MEDIAN INCOME DATA
+        medIncome = medIncome.map(function (d) {
+          return {
+            state: d.State,
+            medianIncome: d["2019"],
+          };
+        });
+        medIncome.forEach((d) => {
+          d.medianIncome = d.medianIncome.replace(/,/g, "");
+          d.state = d.state.trim();
+        });
 
-        var average = d3
+        medIncome.forEach((d) => {
+          d.medianIncome = parseFloat(d.medianIncome);
+        });
+
+        medIncome = d3
           .nest()
-          .key((d) => d.date)
+          .key((d) => d.state)
           .rollup((v) => {
             return {
-              date: v[0].date,
-              mean: d3.mean(v, (d) => d.value),
+              medianIncome: v[0].medianIncome,
             };
           })
-          .entries(data);
+          .entries(medIncome);
 
-        // average.sort((a, b) => d3.ascending(a.value.date, b.value.date));
+        // COMBINE DATA
+        let combinedData = data.map((d) => {
+          let newCollegeRaceData = findObjectByKey(
+            collegeRaceData,
+            "key",
+            d.key
+          );
+          let newStateRaceData = findObjectByKey(stateRaceData, "key", d.key);
+          let stateMedIncome = findObjectByKey(medIncome, "key", d.key);
 
-        x.domain(d3.extent(data, (d) => d.date));
-        y.domain([
-          8000,
-          d3.max(Regions, (c) => d3.max(c.values, (d) => d.value.mean)) + 1000
-        ]);
-        z.domain(Regions.map((c) => c.key));
+          return {
+            state: d.key,
+            region: d.value.Region,
+            avgTuition: d.value.avgTuition,
+            percentWhite: newStateRaceData.value.percentWhite,
+            minorityRep: newCollegeRaceData.value.minorityRep,
+            medianIncome: stateMedIncome.value.medianIncome,
+          };
+        });
 
+        let regions = [
+          "New-England",
+          "Pacific-Costal",
+          "Mid-Atlantic",
+          "Midwest",
+          "Southeast",
+          "Southwest",
+          "Rocky-Mountains",
+        ];
+
+        // Color scale: give me a region name, I return a color
+        const colors = [
+          "#F012BE",
+          "#2ECC40",
+          "#FF4136",
+          "#0074D9",
+          "#85144b",
+          "#3D9970",
+          "#FF851B",
+        ];
+
+        // set the ranges
+        var x = d3
+          .scaleLinear()
+          .domain([
+            d3.min(combinedData, function (d) {
+              return d.medianIncome;
+            }) - 5000,
+            d3.max(combinedData, function (d) {
+              return d.medianIncome;
+            }) + 5000,
+          ])
+          .range([0, width]);
+        var y = d3
+          .scaleLinear()
+          .domain([
+            d3.min(combinedData, function (d) {
+              return d.avgTuition;
+            }) - 5000,
+            d3.max(combinedData, function (d) {
+              return d.avgTuition;
+            }) + 5000,
+          ])
+          .range([height, 0]);
+        var z = d3
+          .scaleLinear()
+          .domain([
+            d3.min(combinedData, function (d) {
+              return d.minorityRep;
+            }),
+            d3.max(combinedData, function (d) {
+              return d.minorityRep;
+            }),
+          ])
+          .range([5, 25]);
+
+        // add the x-axis
         svg
           .append("g")
-          .attr("class", "axis axis--x")
           .attr("transform", "translate(0," + height + ")")
           .call(d3.axisBottom(x));
 
-        // append y axis
-        svg
-          .append("g")
-          .attr("class", "axis axis--y")
-          .call(d3.axisLeft(y))
-          .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", "0.71em")
-          .attr("fill", "#000");
+        // add the y-axis
+        svg.append("g").call(d3.axisLeft(y));
 
-        // append y axis label
-        svg
-          .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("x", -(height / 2))
-          .attr("y", -55)
-          .style("text-anchor", "middle")
-          .text("Tuition Price ($)");
+        // initialize the d3-tip tooltip
+        var tip = d3
+          .tip()
+          .attr("class", "d3-tip")
+          .offset([-5, 0])
+          .html(function (d) {
+            return d.state;
+          });
 
-        // append x axis label
-        svg
-          .append("text")
-          .attr("x", width / 2)
-          .attr("y", height + 45)
-          .style("text-anchor", "middle")
-          .text("Year");
+        // add the tooltip to the SVG
+        svg.call(tip);
 
-        // enter avg line
-        var region = svg
-          .selectAll(".Region")
-          .data(Regions)
+        // add the bubbles
+        svg
+          .selectAll("dot")
+          .data(combinedData)
           .enter()
-          .append("g")
-          .attr("class", "Region");
+          .append("circle")
+          .attr("cx", function (d) {
+            return x(d.medianIncome);
+          })
+          .attr("cy", function (d) {
+            return y(d.avgTuition);
+          })
+          .attr("r", function (d) {
+            return z(d.minorityRep);
+          })
+          .style("fill", function (d) {
+            return colors[regions.indexOf(d.region)];
+          })
+          // add event listeners for the tooltip and highlight
+          .on("mouseover", function (d) {
+            d3.select(this).style("stroke", "black").style("stroke-width", 2);
+            tip.show(d, this);
+          })
+          .on("mouseout", function (d) {
+            d3.select(this).style("stroke", "none");
+            tip.hide(d, this);
+          });
 
-        // append all lines
-        region
-          .append("path")
-          .attr("class", "line")
-          .attr("d", (d) => line(d.values))
-          .style("stroke", (d) => z(d.key));
-
+        // add x-axis label
         svg
-          .append("path")
-          .datum(average)
-          .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-linejoin", "round")
-          .attr("stroke-linecap", "round")
-          .attr("stroke-width", 2)
-          .style("stroke-dasharray", "5 5")
-          .attr("d", averageline);
+          .append("text")
+          .attr(
+            "transform",
+            "translate(" + width / 2 + "," + (height + margin.bottom - 10) + ")"
+          )
+          .style("text-anchor", "middle")
+          .text("Median Income ($)");
 
-        //How big the legand box is
-        var legendBox = 140;
-
-        // draw legend
-        console.log(Regions);
-
+        // create the legend SVG element
         var legend = svg
-          .selectAll(".legend")
-          .data(Regions)
-          .enter()
           .append("g")
           .attr("class", "legend")
-          .attr("transform", function (d, i) {
-            return "translate(0," + i * 20 + ")";
-          })
-          .on("mouseover", function () {
-            //mouse over functions to fade
-            d3.select(this)
-              .select("rect")
-              .style("stroke", (d) => z(d.key))
-              .style("opacity", 0.5);
-          })
-          .on("mouseout", function () {
-            //leave opaque when not mousing over
-            d3.select(this)
-              .select("rect")
-              .style("stroke", "none")
-              .style("opacity", 1.0);
-          })
-          .on("click", function (d) {
-            //when click
-            region.style("stroke-width", 2).style("stroke-opacity", 1);
+          .attr("transform", "translate(" + 20 + "," + 0 + ")");
 
-            region
-              .filter((e) => e.key !== d.key) //filter unclicked lines
-              .style("stroke-width", 1)
-              .style("stroke-opacity", 0.1);
-          });
-        // draw legend colored rectangles
+        // add the color rectangles to the legend
         legend
+          .selectAll("rect")
+          .data(regions)
+          .enter()
           .append("rect")
-          .attr("x", 10)
-          .attr("y", 0)
-          .attr("rx", 5)
-          .attr("width", legendBox)
+          .attr("x", 0)
+          .attr("y", function (d, i) {
+            return i * 22;
+          })
+          .attr("width", 20)
           .attr("height", 20)
-          .style("fill", (d) => z(d.key));
+          .style("fill", function (d, i) {
+            return colors[i];
+          });
 
-        // draw legend text
+        // add the legend text to the legend
         legend
+          .selectAll("text")
+          .data(regions)
+          .enter()
           .append("text")
-          .attr("x", 10 + legendBox / 2)
-          .attr("y", 9)
+          .attr("x", 25)
+          .attr("y", function (d, i) {
+            return i * 22 + 9;
+          })
           .attr("dy", ".35em")
-          .attr("text-anchor", "middle")
-          .style("pointer-events", "none")
-          .text((d) => d.key);
+          .text(function (d) {
+            return d;
+          });
+
+        // add click event listener to the legend
+        legend.selectAll("rect").on("click", function (region) {
+          var isActive = d3.select(this).classed("active");
+          // if the clicked rectangle is already active, show all regions and make this rectangle inactive
+          if (isActive) {
+            svg.selectAll("circle").style("opacity", 1);
+            d3.select(this).classed("active", false);
+          } else {
+            // otherwise, show only circles for the clicked region and make this rectangle active
+            svg.selectAll("circle").style("opacity", function (d) {
+              return d.region === region ? 1 : 0.2;
+            });
+            legend.selectAll("rect").classed("active", false);
+            d3.select(this).classed("active", true);
+          }
+        });
+
+        svg
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - margin.left)
+          .attr("x", 0 - height / 2)
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text("Average Tuition ($)");
       });
     </script>
     <style>
+      .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        text-align: center;
+        width: 960px;
+      }
+      .tg td {
+        border-color: white;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+      }
+      .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+      }
+      .tg .tg-8jgo {
+        border-color: #ffffff;
+        text-align: center;
+        vertical-align: top;
+      }
+      .tg .tg-efmj {
+        background-color: #cccccc;
+        border-color: #000000;
+        text-align: center;
+        vertical-align: top;
+      }
+      .tg .tg-8r7r {
+        background-color: #e7e7e7;
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top;
+      }
+      .tg .tg-14m1 {
+        background-color: rgb(240, 240, 240);
+        border-color: #000000;
+      }
+
+      .table-container {
+        margin-bottom: 20px;
+      }
+      .sources-container a {
+        margin-left: 20px;
+      }
+      .sources-container {
+        width: 960px;
+      }
+      .legend {
+        cursor: pointer;
+      }
+      .axis {
+        opacity: 0.4;
+      }
+      .axis:hover {
+        opacity: 1;
+      }
       .nav-buttons-container {
         display: flex;
         width: 960px;
@@ -333,7 +589,7 @@
         font-family: "Alata", sans-serif;
       }
       body {
-        font-family: "Alata", sans-serif;
+        font-family: "Alata", sans-serif !important;
       }
       .img-container {
         width: 100%;
@@ -383,11 +639,13 @@
       .axis--x path {
         stroke: black;
       }
-
       .line {
         fill: none;
         stroke: steelblue;
         stroke-width: 1.5px;
+      }
+      p {
+        font-family: "Alata", sans-serif !important;
       }
     </style>
   </body>

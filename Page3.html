@@ -67,7 +67,6 @@
       var parseTime = d3.timeParse("%Y");
 
       raw_data = d3.csv("raw_data.csv").then((raw_data) => {
-        console.log(raw_data);
 
         raw_data.map((d) => {
           if (
@@ -136,8 +135,6 @@
             d.Region = "Southwest";
           } else d.Region = "Pacific Costal";
         });
-
-        console.log(raw_data);
 
         data = d3.csv("data.csv").then((data) => {
           data.forEach((d) => {
@@ -237,11 +234,10 @@
                 mean_native: d3.mean(v, (d) => d.nativePeople),
                 mean_polynesian: d3.mean(v, (d) => d.polynesian),
                 mean_mr: d3.mean(v, (d) => d.MR),
+                total: d3.mean(v, (d) => d.Total)
               };
             })
             .entries(raw_data);
-
-          console.log(raw_data);
 
           data = d3
             .nest()
@@ -255,14 +251,11 @@
             })
             .entries(data);
 
-          console.log(data);
-
           let data_path = [];
           let features = ["SE", "PC", "SW", "RM", "NE", "MA", "MW"];
 
           // generate the data
           var e = 0;
-          console.log(data[1].values[0].value.mean);
 
           for (let i = 0; i < 8; i++) {
             var point = {};
@@ -278,38 +271,11 @@
               data_path.push(point);
             } else if (i == 2) {
               features.forEach(function (f, j) {
-                point[f] = raw_data[j].value.mean_black * 10;
+                point[f] = (raw_data[j].value.total - raw_data[j].value.mean_white) * 10;
               });
               data_path.push(point);
-            } else if (i == 3) {
-              features.forEach(function (f, j) {
-                point[f] = raw_data[j].value.mean_hispanic * 10;
-              });
-              data_path.push(point);
-            } else if (i == 4) {
-              features.forEach(function (f, j) {
-                point[f] = raw_data[j].value.mean_asian * 10;
-              });
-              data_path.push(point);
-            } else if (i == 5) {
-              features.forEach(function (f, j) {
-                point[f] = raw_data[j].value.nativePeople * 10;
-              });
-              data_path.push(point);
-            } else if (i == 6) {
-              features.forEach(function (f, j) {
-                point[f] = raw_data[j].value.mean_polynesian * 10;
-              });
-              data_path.push(point);
-            } else if (i == 7) {
-              features.forEach(function (f, j) {
-                point[f] = raw_data[j].value.mean_mr * 10;
-              });
-              data_path.push(point);
-            }
+            } 
           }
-
-          console.log(data_path);
 
           let width = 900;
           let height = 600;
@@ -324,6 +290,18 @@
 
           let ticks = [2, 4, 6, 8, 10];
 
+          const tooltip = d3
+            .select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+            const keyLabels = [
+                "Mean Value",
+                "Mean White",
+                "Mean Minority",
+            ];
+            
           svg
             .selectAll("circle")
             .data(ticks)
@@ -399,11 +377,6 @@
             "green",
             "grey",
             "blue",
-            "purple",
-            "black",
-            "orange",
-            "cyan",
-            "brown",
           ];
 
           function getPathCoordinates(data_point) {
@@ -421,78 +394,73 @@
 
           // draw the path element
           svg
-            .selectAll("path")
-            .data(data_path)
-            .join((enter) =>
-              enter
-                .append("path")
-                .datum((d) => getPathCoordinates(d))
-                .attr("d", line)
-                .attr("stroke-width", 3)
-                .attr("stroke", (_, i) => colors[i])
-                .attr("fill", "none")
-                .attr("stroke-opacity", 1)
-                .attr("opacity", 0.5)
-            );
+    .selectAll("path")
+    .data(data_path)
+    .join((enter) =>
+      enter
+        .append("path")
+        .datum((d) => getPathCoordinates(d))
+        .attr("d", line)
+        .attr("stroke-width", 5)
+        .attr("stroke", (_, i) => colors[i])
+        .attr("fill", (_, i) => colors[i])
+        .attr("stroke-opacity", 1)
+        .attr("opacity", 0.5)
+        .on("mouseover", (event, d, i) => {
+          tooltip.transition().duration(200).style("opacity", 0.9);
+          tooltip
+            .html(
+              `
+            <p>Mean Value: ${data[i].values[0].value.mean.toFixed(2)}</p>
+            <p>Mean White: ${raw_data[i].value.mean_white.toFixed(2)}</p>
+            <p>Mean Black: ${raw_data[i].value.mean_black.toFixed(2)}</p>
+            <p>Mean Hispanic: ${raw_data[i].value.mean_hispanic.toFixed(2)}</p>
+            <p>Mean Asian: ${raw_data[i].value.mean_asian.toFixed(2)}</p>
+            <p>Mean Native: ${raw_data[i].value.mean_native.toFixed(2)}</p>
+            <p>Mean Polynesian: ${raw_data[i].value.mean_polynesian.toFixed(
+              2
+            )}</p>
+            <p>Mean MR: ${raw_data[i].value.mean_mr.toFixed(2)}</p>
+            `
+            )
+            .style("left", event.pageX + 10 + "px")
+            .style("top", event.pageY - 28 + "px");
+        })
+        .on("mouseout", () => {
+          tooltip.transition().duration(500).style("opacity", 0);
+        })
+    );
+    
+    //How big the legand box is
+    var legendBox = 140;
 
-          //How big the legand box is
-          var legendBox = 140;
+    var legend = svg
+        .append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(" + (width - legendBox) + ", 30)");
 
-          // draw legend
-          var legend = svg
-            .selectAll(".legend")
-            .data(data)
-            .enter()
-            .append("g")
-            .attr("class", "legend")
-            .attr("transform", function (d, i) {
-              return "translate(0," + i * 20 + ")";
-            })
-            .on("mouseover", function () {
-              //mouse over functions to fade
-              d3.select(this)
-                .select("rect")
-                .style("stroke", (d) => z(d.key))
-                .style("opacity", 0.5);
-            })
-            .on("mouseout", function () {
-              //leave opaque when not mousing over
-              d3.select(this)
-                .select("rect")
-                .style("stroke", "none")
-                .style("opacity", 1.0);
-            })
-            .on("click", function (d) {
-              //when click
-              county.style("stroke-width", 2).style("stroke-opacity", 1);
+    legend
+        .selectAll("rect")
+        .data(colors)
+        .enter()
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", (d, i) => i * 20)
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("fill", (d) => d);
 
-              county
-                .filter((e) => e.key !== d.key) //filter unclicked lines
-                .style("stroke-width", 1)
-                .style("stroke-opacity", 0.1);
-            });
-
-          // draw legend colored rectangles
-          legend
-            .append("rect")
-            .attr("x", width + 10)
-            .attr("y", margin.top)
-            .attr("rx", 5)
-            .attr("width", legendBox)
-            .attr("height", 20)
-            .style("fill", (d) => z(d.key));
-
-          // draw legend text
-          legend
-            .append("text")
-            .attr("x", width + 10 + legendBox / 2)
-            .attr("y", margin.top + 9)
-            .attr("dy", ".35em")
-            .attr("text-anchor", "middle")
-            .style("pointer-events", "none")
-            .text((d) => d.key);
+    // Add interactive key labels
+    legend
+        .selectAll("text")
+        .data(keyLabels)
+        .enter()
+        .append("text")
+        .attr("x", 15)
+        .attr("y", (d, i) => i * 20 + 9)
+        .text((d) => d);
         });
-      });
+    });
     </script>
     <style>
       .nav-buttons-container {
